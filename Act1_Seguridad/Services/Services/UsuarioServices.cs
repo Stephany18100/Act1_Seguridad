@@ -72,25 +72,42 @@ namespace Act1_Seguridad.Services.Services
             }
         }
 
-        public async Task<Response<Usuario>> Update(UsuarioRequest request)
+        public async Task<Response<Usuario>> Update(UsuarioRequest request, int id)
         {
             try
             {
-                Usuario usuario = await _context.Usuarios.FindAsync(request.PkUsuario);
-                Usuario response = new Usuario()
-                {
-                    Nombre = request.Nombre,
-                    UserName = request.UserName,
-                    Password = request.Password,
-                    FkRol = request.FkRol,
-                };
-                _context.Usuarios.Update(response);
+                var response = _context.Usuarios.Find(id);
+                response.Nombre = request.Nombre;
+                response.UserName = request.UserName;
+                response.Password = request.Password;
+                response.FkRol = request.FkRol;
+
+                _context.Entry(response).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                return new Response<Usuario>(response);
+
+                return new Response<Usuario>(response, "Se actualizo correctamente");
+
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw new Exception("Ocurrio un error " + ex.Message);
+
+                throw new Exception("ocurrio un error: " + e.Message);
+            }
+        }
+
+        public async Task<Response<Usuario>> Delete(int id)
+        {
+            try
+            {
+                Usuario response = _context.Usuarios.Find(id);
+                _context.Usuarios.Remove(response);
+                await _context.SaveChangesAsync();
+
+                return new Response<Usuario>(response, "Se elimino correctamente");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Ocurrio un error " + e.Message);
             }
         }
 

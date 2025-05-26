@@ -38,10 +38,16 @@ namespace Act1_Seguridad.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(UsuarioRequest request)
+        [HttpPut("id")]
+        public async Task<IActionResult> PutUser(UsuarioRequest request, int id)
         {
-            var response = await _usuarioServices.Update(request);
-            return Ok(response);
+            return Ok(await _usuarioServices.Update(request, id));
+        }
+
+        [HttpDelete("id")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return Ok(await _usuarioServices.Delete(id));
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Act1_Seguridad.Services.IServices
         public Task<Response<Usuario>> GetById(int id);
         public Task<Response<Usuario>> Create(UsuarioRequest request);
 
-        public Task<Response<Usuario>> Update(UsuarioRequest request);
+        public Task<Response<Usuario>> Update(UsuarioRequest request, int id);
+        public Task<Response<Usuario>> Delete(int id);
     }
 }

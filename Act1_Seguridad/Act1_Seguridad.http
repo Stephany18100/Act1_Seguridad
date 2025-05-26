@@ -1,0 +1,6 @@
+@Act1_Seguridad_HostAddress = http://localhost:5057
+
+GET {{Act1_Seguridad_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

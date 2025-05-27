@@ -16,6 +16,7 @@ builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<IUsuarioServices, UsuarioServices>();
 //builder.Services.AddTransient<IAutorServices, UsuarioServices>();
+builder.Services.AddTransient<IRolServices, RolServices>();
 
 var app = builder.Build();
 

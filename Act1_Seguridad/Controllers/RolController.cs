@@ -1,9 +1,11 @@
 ﻿using Act1_Seguridad.Services.IServices;
 using Domain.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Act1_Seguridad.Controllers
 {
+    [Authorize] 
     [ApiController]
     [Route("[controller]")]
     public class RolController : ControllerBase

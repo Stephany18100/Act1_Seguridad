@@ -9,14 +9,14 @@ namespace Act1_Seguridad.Services.Services
 {
     public class UsuarioServices : IUsuarioServices
     {
-        //el guion bajo represnta q esta protegido
-        private readonly ApplicationDbContext _context;
+        
+        private readonly ApplicationDbContext _context; //inyeccion de dependencias del contexto de la base de datos
         public UsuarioServices(ApplicationDbContext context) { 
             _context = context;
         }
 
         //Lista de usuarios
-        public async Task<Response<List<Usuario>>> GetAll()
+        public async Task<Response<List<Usuario>>> GetAll() //devueleve la lista de usuarios
         {
             try
             {
@@ -37,7 +37,8 @@ namespace Act1_Seguridad.Services.Services
         {
             try
             {
-                Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.PkUsuario == id);
+                //busca un usuario por su id
+                Usuario usuario = await _context.Usuarios.Include(x => x.Roles).FirstOrDefaultAsync(x => x.PkUsuario == id);
                 return new Response<Usuario>(usuario);
 
                 //Usuario usuario = await _context.Usuarios.FindAsync(id);
@@ -53,6 +54,7 @@ namespace Act1_Seguridad.Services.Services
         {
             try
             {
+                //crea un nuevo usuario con los datos del request
                 Usuario usuario1 = new Usuario()
                 {
                     Nombre = request.Nombre,
@@ -62,7 +64,7 @@ namespace Act1_Seguridad.Services.Services
                 };
                 _context.Usuarios.Add(usuario1);
                 //_context.SaveChanges();
-
+                // //guarda los cambios en la base de datos de forma asincrona
                 await _context.SaveChangesAsync();
                 return new Response<Usuario>(usuario1);
             }
@@ -72,6 +74,7 @@ namespace Act1_Seguridad.Services.Services
             }
         }
 
+        // Actualiza un usuario por su id
         public async Task<Response<Usuario>> Update(UsuarioRequest request, int id)
         {
             try
@@ -81,7 +84,7 @@ namespace Act1_Seguridad.Services.Services
                 response.UserName = request.UserName;
                 response.Password = request.Password;
                 response.FkRol = request.FkRol;
-
+                //entity state modified para indicar que la entidad ha sido modificada
                 _context.Entry(response).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
